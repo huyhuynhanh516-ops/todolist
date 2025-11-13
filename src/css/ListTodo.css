@@ -1,0 +1,33 @@
+#listTodo {
+    display: flex;
+    justify-content: center;
+    font-family: cursive;
+}
+
+#listTodo ul {
+    list-style: none;
+    padding-left: 0px;
+    width: 318px;
+}
+
+#listTodo ul li {
+    display: flex;
+    align-items: center;
+}
+
+#listTodo .title {
+    flex: 10;
+    text-align: left;
+}
+
+#listTodo .isDone {
+    margin-bottom: 0px;
+}
+
+#listTodo .btnDelete {
+    flex: 1;
+}
+
+#listTodo .btnDelete:hover {
+    cursor: pointer;
+}

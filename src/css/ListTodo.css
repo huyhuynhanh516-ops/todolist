@@ -2,6 +2,7 @@
     display: flex;
     justify-content: center;
     font-family: cursive;
+    color: aquamarine;
 }
 
 #listTodo ul {
@@ -18,6 +19,7 @@
 #listTodo .title {
     flex: 10;
     text-align: left;
+    font-size: 20px;
 }
 
 #listTodo .isDone {

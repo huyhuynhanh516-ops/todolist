@@ -1,4 +1,10 @@
 #header {
     font-size: 20px;
     font-family: monospace;
+    color: aquamarine;
+}
+
+#header h1 {
+    padding-top: 26px;
+    margin-top: 0px;
 }

@@ -4,6 +4,8 @@ import { useState } from "react";
 import Header from "./Header";
 import Content from "./Content";
 import Footer from "./Footer";
+import Alert from "./Alert";
+import Confirm from "./Confirm";
 
 function App() {
 
@@ -19,6 +21,18 @@ function App() {
   // @ts-ignore
   const [isDone, setIsDone] = useState(() => getIsDone());
 
+  // Alert,Confirm
+  const [notification, setNotification] = useState({ show: false, message: "", type: "info", autoHide: false });
+  const [showConfirm, setShowConfirm] = useState(false);
+  const [notificationConfirm, setNotificationConfirm] = useState("");
+  const [confirmData, setConfirmData] = useState({}); 
+
+
+  // @ts-ignore
+  const showAlert = (msg, type = "success", autoHide) => {
+    setNotification({ show: true, message: msg, type, autoHide });
+  };
+
   const handleSubmit = () => {
     if (job.trim()) {
       // @ts-ignore
@@ -30,24 +44,17 @@ function App() {
         return data;
       });
       setJob("");
-      alert("Thêm thành công");
+      showAlert("Thêm thành công", "success", true);
     } else {
-      alert("Vui lòng nhập task");
+      showAlert("Vui lòng nhập task", "warning", false);
     }
   }
 
   // @ts-ignore
   const handleDelete = (index) => {
-    const isDelete = window.confirm("Bạn có chắc chắn muốn xóa không?");
-    if (isDelete) {
-      setDatas(() => {
-        // @ts-ignore
-        const newData = datas.filter((_, i) => i !== index);
-        localStorage.setItem("jobs", JSON.stringify(newData))
-        return newData;
-      });
-    }
-
+    setNotificationConfirm("Bạn có chắc chắn muốn xóa không?");
+    setShowConfirm(true);
+    setConfirmData({indexDelete: index, action: "deleteTask"})
   }
 
   // @ts-ignore
@@ -69,6 +76,23 @@ function App() {
     })
   }
 
+  const handleConfirm = () => {
+    // @ts-ignore
+    if (confirmData?.action === "deleteTask") {
+      setDatas(() => {
+        // @ts-ignore
+        const newData = datas.filter((_, i) => i !== confirmData.indexDelete);
+        localStorage.setItem("jobs", JSON.stringify(newData))
+        return newData;
+      });
+    }
+    setShowConfirm(false);
+  };
+
+  const handleCancel = () => {
+    setShowConfirm(false);
+  };
+
   return (
     <div className="App">
       <Header />
@@ -81,6 +105,22 @@ function App() {
         handleCheck={handleCheck}
       />
       <Footer isDone={isDone}/>
+      <Alert
+        message={notification.message}
+        type={notification.type}
+        show={notification.show}
+        onClose={() => setNotification({ ...notification, show: false })}
+        duration={1000} // tự ẩn sau 2 giây
+        autoHide={notification.autoHide}
+      />
+      
+      <Confirm
+        show={showConfirm}
+        message={notificationConfirm}
+        type="warning"
+        onConfirm={handleConfirm}
+        onCancel={handleCancel}
+      />
     </div>
   );
 }

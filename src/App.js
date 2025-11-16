@@ -10,16 +10,24 @@ function App() {
   const [job, setJob] = useState("");
   // @ts-ignore
   const [datas, setDatas] = useState(() => JSON.parse(localStorage.getItem("jobs")) ?? []);
-  const [isDone, setIsDone] = useState([]);
+
+  const getIsDone = () => {
+    // @ts-ignore
+    return datas?.map((item, index) => (item.isDone === true ? index : null)).filter(i => i !== null);
+  }
+
+  // @ts-ignore
+  const [isDone, setIsDone] = useState(() => getIsDone());
 
   const handleSubmit = () => {
     if (job.trim()) {
       // @ts-ignore
       setDatas(prev => {
+
         // @ts-ignore
-        const newJob = [...prev, job];
-        localStorage.setItem("jobs", JSON.stringify(newJob))
-        return newJob;
+        const data = [...prev, { name: job, isDone: false }];
+        localStorage.setItem("jobs", JSON.stringify(data));
+        return data;
       });
       setJob("");
     } 
@@ -41,8 +49,14 @@ function App() {
     setIsDone(prev => {
       // @ts-ignore
       if (isDone.includes(index)) {
-        return isDone.filter(item => item !== index)
+        datas[index].isDone = false;
+        localStorage.setItem("jobs", JSON.stringify(datas))
+        // @ts-ignore
+        return isDone.filter(item => item !== index);
       } else {
+        datas[index].isDone = true;
+        localStorage.setItem("jobs", JSON.stringify(datas))
+        // @ts-ignore
         return [...prev, index];
       }
     })

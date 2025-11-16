@@ -10,16 +10,16 @@ function ListTodo({datas, handleDelete, isDone, handleCheck}) {
             <ul>
                 {
                     // @ts-ignore
-                    datas.map((item, index) => {
+                    datas?.map((item, index) => {
                         return <li key={index}> 
                             <input
                                 checked={isDone.includes(index)}
-                                id={item + index} 
+                                id={item.name + index} 
                                 className="isDone" 
                                 type="checkbox"
                                 onChange={() => handleCheck(index)}
                             /> 
-                            <label className="title" htmlFor={item + index}>{item}</label> 
+                            <label className="title" htmlFor={item.name + index}>{item.name}</label> 
                             <Trash
                                 className="btnDelete"
                                 size={18} color="red" 

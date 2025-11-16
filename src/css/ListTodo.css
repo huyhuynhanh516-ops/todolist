@@ -28,6 +28,7 @@
 
 #listTodo .btnDelete {
     flex: 1;
+    filter: invert(1);
 }
 
 #listTodo .btnDelete:hover {

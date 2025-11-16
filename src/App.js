@@ -10,29 +10,44 @@ function App() {
   const [job, setJob] = useState("");
   // @ts-ignore
   const [datas, setDatas] = useState(() => JSON.parse(localStorage.getItem("jobs")) ?? []);
-  const [isDone, setIsDone] = useState([]);
+
+  const getIsDone = () => {
+    // @ts-ignore
+    return datas?.map((item, index) => (item.isDone === true ? index : null)).filter(i => i !== null);
+  }
+
+  // @ts-ignore
+  const [isDone, setIsDone] = useState(() => getIsDone());
 
   const handleSubmit = () => {
     if (job.trim()) {
       // @ts-ignore
       setDatas(prev => {
+
         // @ts-ignore
-        const newJob = [...prev, job];
-        localStorage.setItem("jobs", JSON.stringify(newJob))
-        return newJob;
+        const data = [...prev, { name: job, isDone: false }];
+        localStorage.setItem("jobs", JSON.stringify(data));
+        return data;
       });
       setJob("");
-    } 
+      alert("Thêm thành công");
+    } else {
+      alert("Vui lòng nhập task");
+    }
   }
 
   // @ts-ignore
   const handleDelete = (index) => {
-    setDatas(() => {
-      // @ts-ignore
-      const newData = datas.filter((_, i) => i !== index);
-      localStorage.setItem("jobs", JSON.stringify(newData))
-      return newData;
-    });
+    const isDelete = window.confirm("Bạn có chắc chắn muốn xóa không?");
+    if (isDelete) {
+      setDatas(() => {
+        // @ts-ignore
+        const newData = datas.filter((_, i) => i !== index);
+        localStorage.setItem("jobs", JSON.stringify(newData))
+        return newData;
+      });
+    }
+
   }
 
   // @ts-ignore
@@ -41,8 +56,14 @@ function App() {
     setIsDone(prev => {
       // @ts-ignore
       if (isDone.includes(index)) {
-        return isDone.filter(item => item !== index)
+        datas[index].isDone = false;
+        localStorage.setItem("jobs", JSON.stringify(datas))
+        // @ts-ignore
+        return isDone.filter(item => item !== index);
       } else {
+        datas[index].isDone = true;
+        localStorage.setItem("jobs", JSON.stringify(datas))
+        // @ts-ignore
         return [...prev, index];
       }
     })
@@ -57,8 +78,6 @@ function App() {
         onChange={e => setJob(e.target.value)} 
         onClick={handleSubmit} datas={datas}
         handleDelete={handleDelete}
-        // @ts-ignore
-        isDone={isDone}
         handleCheck={handleCheck}
       />
       <Footer isDone={isDone}/>

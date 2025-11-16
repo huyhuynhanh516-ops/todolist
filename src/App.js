@@ -53,8 +53,17 @@ function App() {
   // @ts-ignore
   const handleDelete = (index) => {
     setNotificationConfirm("Bạn có chắc chắn muốn xóa không?");
+    setConfirmData({
+      action: () => {
+        setDatas(() => {
+          // @ts-ignore
+          const newData = datas.filter((_, i) => i !== index);
+          localStorage.setItem("jobs", JSON.stringify(newData))
+          return newData;
+        })
+      }
+    });
     setShowConfirm(true);
-    setConfirmData({indexDelete: index, action: "deleteTask"})
   }
 
   // @ts-ignore
@@ -78,14 +87,7 @@ function App() {
 
   const handleConfirm = () => {
     // @ts-ignore
-    if (confirmData?.action === "deleteTask") {
-      setDatas(() => {
-        // @ts-ignore
-        const newData = datas.filter((_, i) => i !== confirmData.indexDelete);
-        localStorage.setItem("jobs", JSON.stringify(newData))
-        return newData;
-      });
-    }
+    confirmData?.action();
     setShowConfirm(false);
   };
 

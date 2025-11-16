@@ -30,17 +30,24 @@ function App() {
         return data;
       });
       setJob("");
-    } 
+      alert("Thêm thành công");
+    } else {
+      alert("Vui lòng nhập task");
+    }
   }
 
   // @ts-ignore
   const handleDelete = (index) => {
-    setDatas(() => {
-      // @ts-ignore
-      const newData = datas.filter((_, i) => i !== index);
-      localStorage.setItem("jobs", JSON.stringify(newData))
-      return newData;
-    });
+    const isDelete = window.confirm("Bạn có chắc chắn muốn xóa không?");
+    if (isDelete) {
+      setDatas(() => {
+        // @ts-ignore
+        const newData = datas.filter((_, i) => i !== index);
+        localStorage.setItem("jobs", JSON.stringify(newData))
+        return newData;
+      });
+    }
+
   }
 
   // @ts-ignore
@@ -71,8 +78,6 @@ function App() {
         onChange={e => setJob(e.target.value)} 
         onClick={handleSubmit} datas={datas}
         handleDelete={handleDelete}
-        // @ts-ignore
-        isDone={isDone}
         handleCheck={handleCheck}
       />
       <Footer isDone={isDone}/>

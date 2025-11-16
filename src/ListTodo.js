@@ -4,7 +4,7 @@ import "./css/ListTodo.css";
 import { Trash } from 'lucide-react';
 
 // @ts-ignore
-function ListTodo({datas, handleDelete, isDone, handleCheck}) {
+function ListTodo({datas, handleDelete, handleCheck}) {
     return (
         <div id="listTodo">
             <ul>
@@ -13,13 +13,18 @@ function ListTodo({datas, handleDelete, isDone, handleCheck}) {
                     datas?.map((item, index) => {
                         return <li key={index}> 
                             <input
-                                checked={isDone.includes(index)}
+                                checked={item.isDone}
                                 id={item.name + index} 
                                 className="isDone" 
                                 type="checkbox"
                                 onChange={() => handleCheck(index)}
                             /> 
-                            <label className="title" htmlFor={item.name + index}>{item.name}</label> 
+                            <label 
+                                className="title"
+                                style={{ textDecoration: item.isDone ? "line-through" : "none" }}
+                                htmlFor={item.name + index}>
+                                {item.name}
+                            </label> 
                             <Trash
                                 className="btnDelete"
                                 size={18} color="red" 
